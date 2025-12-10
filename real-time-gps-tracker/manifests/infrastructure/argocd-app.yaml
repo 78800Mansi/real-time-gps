@@ -1,0 +1,26 @@
+# manifests/infrastructure/argocd-app.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gps-tracker-pipeline
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    # Target namespace for all resources (Kafka, DB, Apps)
+    namespace: gps-tracker-data
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: YOUR_GITHUB_REPO_URL 
+    targetRevision: HEAD
+    # ArgoCD watches the entire 'manifests' folder for changes
+    path: manifests
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    # IMPORTANT: Creates the target namespace if it doesn't exist
+    - CreateNamespace=true

@@ -1,0 +1,27 @@
+# manifests/application/consumer-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gps-consumer
+  namespace: gps-tracker-data
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gps-consumer
+  template:
+    metadata:
+      labels:
+        app: gps-consumer
+    spec:
+      containers:
+      - name: consumer
+        # Replace with your actual image later (e.g., yourname/gps-consumer:latest)
+        image: python:3.9-slim
+        command: ["/bin/bash", "-c"]
+        args: ["echo 'Running mock consumer...' && sleep 3600"]
+        env:
+        - name: KAFKA_BROKERS
+          value: "gps-kafka-cluster-plain.gps-tracker-data.svc.cluster.local:9092"
+        - name: POSTGRES_HOST
+          value: "postgres-service"

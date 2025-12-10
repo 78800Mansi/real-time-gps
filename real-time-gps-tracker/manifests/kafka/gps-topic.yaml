@@ -1,0 +1,13 @@
+# manifests/kafka/gps-topic.yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: gps-locations
+  namespace: gps-tracker-data
+  labels:
+    strimzi.io/cluster: gps-kafka-cluster # Links this topic to the cluster above
+spec:
+  partitions: 3 # Recommended: Use 3 partitions for parallel processing
+  replicas: 3
+  config:
+    retention.ms: 604800000 # Retain messages for 7 days

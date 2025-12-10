@@ -1,0 +1,25 @@
+# manifests/application/producer-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gps-producer
+  namespace: gps-tracker-data
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gps-producer
+  template:
+    metadata:
+      labels:
+        app: gps-producer
+    spec:
+      containers:
+      - name: producer
+        # Replace with your actual image later (e.g., yourname/gps-producer:latest)
+        image: python:3.9-slim
+        command: ["/bin/bash", "-c"]
+        args: ["echo 'Running mock producer...' && sleep 3600"]
+        env:
+        - name: KAFKA_BROKERS
+          value: "gps-kafka-cluster-plain.gps-tracker-data.svc.cluster.local:9092"
